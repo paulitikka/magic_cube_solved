@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Feb  2 15:32:29 2020
+Created on Sun Dec  6 15:53:13 2020
 
+@author: pauli
+#Update, note, use linear program instead of mixed one
+"""
+
+#%%
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Feb  2 15:32:29 2020
 @author: pauli
 """
 
@@ -9,31 +17,34 @@ Created on Sun Feb  2 15:32:29 2020
 #Compare to solving example of the system of equations 3 * x0 + x1 = 9 and x0 + 2 * x1 = 8:
 #%https://developers.google.com/optimization/mip/mip_var_array
 import numpy as np 
-a1=65-(12+20+24)
-a2=65-(14+21+17)
-a3=65-(16+13+23)
-a4=65-(22+15+18)
-a5=65-(25+19)
-a6=65-(12+14+25)
-a7=65-(20+21+16)
-a8=65-(17+13+22)
-a9=65-(23+15+19)
-a10=65-(24+18)
-a11=65-(25+13+24)
-a12=65-(12+21+13+15)
-#%%
+a1=65-(21+20+18) #check..
+a2=65-(16+23)
+a3=65-(12+22+15)
+a4=65-(13+14+24)
+a5=65-(19+25+17)
+a6=65-(21+12+19)
+a7=65-(18+22+13)
+a8=65-(16+14+25)
+a9=65-(15+24+17)
+a10=65-(20+23)
+a11=65-(20+13+19)
+a12=65-(21+24)
+#a13=1+2+3+4+5+6+7+8+9+10+11
+#%% [a,b,c,d,e,f,g,h,i,j,k] (the blanks that need to be solved with either 0/1 for every aux variable a(i))
+#[1,2,3,4,5,6,7,8,9,10,11]
 a = [   [1,1,0,0,0,0,0,0,0,0,0],
-        [0,0,1,1,0,0,0,0,0,0,0],
-        [0,0,0,0,1,1,0,0,0,0,0],
-        [0,0,0,0,0,0,1,1,0,0,0],
-        [0,0,0,0,0,0,0,0,1,1,1],    
-        [0,0,0,0,1,0,1,0,0,0,0],
+        [0,0,1,1,1,0,0,0,0,0,0],
+        [0,0,0,0,0,1,1,0,0,0,0],
         [0,0,0,0,0,0,0,1,1,0,0],
-        [1,0,0,0,0,0,0,0,0,1,0],    
-        [0,1,1,0,0,0,0,0,0,0,0],        
-        [0,0,0,1,0,1,0,0,0,0,1],    
+        [0,0,0,0,0,0,0,0,0,1,1],       
         [0,0,1,0,0,0,0,1,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,1]  ]
+        [0,0,0,1,0,0,0,0,0,1,0],
+        [1,0,0,0,0,1,0,0,0,0,0],    
+        [0,1,0,0,1,0,0,0,0,0,0],        
+        [0,0,0,0,0,0,1,0,1,0,1],    
+        [0,0,0,0,1,1,0,0,0,0,0],
+        [0,0,0,1,0,1,0,0,0,0,1]]
+#        [1,1,1,1,1,1,1,1,1,1,1]]
 b = [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12]
 
 #https://scriptverse.academy/tutorials/python-solve-linear-equations.html
@@ -49,15 +60,18 @@ def create_data_model():
   data['bounds'] = b
   data['obj_coeffs'] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
   data['num_vars'] = 11
-  data['num_constraints'] = 12
+  data['num_constraints'] =12
   return data
 
-
+#check also
+#https://stackoverflow.com/questions/56042803/constrained-optimization-in-python-where-one-variable-depends-on-another-variabl
 def main():
   data = create_data_model()
   # Create the mip solver with the CBC backend.
-  solver = pywraplp.Solver('simple_mip_program',
-                           pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
+  solver = pywraplp.Solver('SolveSimpleSystem',
+                           pywraplp.Solver.BOP_INTEGER_PROGRAMMING)
+#  https://stackoverflow.com/questions/59116520/linear-programming-google-ortools-incorrect-decision-variable-final-values
+#Note, this is integer problem, eventhough there are constraints
 #  solver.Add(data <= 3.5)
   infinity = solver.infinity()
 #  model.Add(x != y)
