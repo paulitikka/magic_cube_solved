@@ -117,3 +117,53 @@ if __name__ == '__main__':
   main()
   
 #%% Press enter above, and see what happens! :)
+
+#Of course you can use matrix algebra (with python or Matlab), or, :)
+
+#Pauli, 23717. Solving 5x5 magic qube spots, a+20+16+b+21=65 etc.:
+
+#At matlab:
+>>Ax=zeros(12,11) 		#11 variables, 12 equations, then fill a, bs, etc.s with 1:
+>>Ax=[1	1	0	0	0	0	0	0	0	0	0
+0	0	1	0	0	0	0	0	0	0	0
+0	0	0	1	1	1	0	0	0	0	0
+0	0	0	0	0	0	1	1	0	0	0
+0	0	0	0	0	0	0	0	1	1	1
+1	0	0	0	0	0	0	0	1	0	0
+0	0	0	0	0	0	1	0	0	1	0
+0	0	0	1	0	0	0	0	0	0	1
+0	1	0	0	1	0	0	1	0	0	0
+0	0	1	0	0	1	0	0	0	0	0
+0	0	0	1	0	0	1	0	1	0	0
+1	0	0	1	0	0	0	1	0	0	0];
+
+>>Bx=[8                                  # 65-the rest makes a vector
+1
+25
+16
+16
+14
+12
+13
+22
+5
+25
+25];
+
+>> X=linsolve(Ax,Bx);        # the spots, Xs
+>> X
+X =
+    6.0000
+    2.0000
+    1.0000
+   10.0000
+   11.0000
+    4.0000
+    7.0000
+    9.0000
+    8.0000
+    5.0000
+3.0000
+
+#Refill the original magic cube with the missing above number (a=6, b=2 etc.). Solved.
+
